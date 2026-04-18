@@ -1,6 +1,7 @@
 package org.example.dscommerce.entities
 
 import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -17,6 +18,7 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
     val name: String,
+    @Column(unique = true)
     val email: String,
     val phone: String,
     val birthDate: LocalDate,

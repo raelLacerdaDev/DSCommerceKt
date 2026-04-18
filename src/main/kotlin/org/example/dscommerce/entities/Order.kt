@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import kotlin.time.ExperimentalTime
@@ -27,9 +28,19 @@ class Order @OptIn(ExperimentalTime::class) constructor(
     val client: User,
 
     @OneToOne(cascade = [CascadeType.ALL])
-    val payment: Payment?
+    val payment: Payment?,
 
+    @OneToMany(mappedBy = "id.order")
+    private val _items: MutableSet<OrderItem> = mutableSetOf(),
 ) {
+
+    val items: List<OrderItem>
+        get() = _items.toList()
+
+    val products: List<Product>
+        get() = _items.map {
+            it.product
+        }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
