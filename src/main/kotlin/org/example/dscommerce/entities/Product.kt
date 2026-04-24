@@ -1,5 +1,6 @@
 package org.example.dscommerce.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -48,14 +49,6 @@ class Product(
 
     override fun hashCode(): Int {
         return javaClass.hashCode()
-    }
-
-    fun addCategory(category: Category) {
-        this._categories.add(category)
-    }
-
-    fun removeCategory(category: Category) {
-        this._categories.remove(category)
     }
 
 }

@@ -31,13 +31,4 @@ class Category (
         if (other !is Category) return false
         return this.id == other.id
     }
-
-    fun addProduct(product: Product) {
-        _products.add(product)
-    }
-
-    fun removeProduct(product: Product) {
-        _products.remove(product)
-    }
-
 }

@@ -38,12 +38,4 @@ class User(
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
-    fun addOrder(order: Order) {
-        this._orders.add(order)
-    }
-
-    fun removeOrder(order: Order) {
-        this._orders.remove(order)
-    }
 }
