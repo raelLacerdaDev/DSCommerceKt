@@ -2,6 +2,7 @@ package org.example.dscommerce.services
 
 import org.example.dscommerce.dto.ProductDTO
 import org.example.dscommerce.mappers.toDTO
+import org.example.dscommerce.mappers.toEntity
 import org.example.dscommerce.repositories.ProductRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -24,6 +25,13 @@ class ProductService(private val productRepository: ProductRepository) {
     fun findAll(pageable: Pageable): Page<ProductDTO> {
         val result = productRepository.findAll(pageable)
         return result.map { it.toDTO() }
+    }
+
+
+    @Transactional fun insert(productDTO: ProductDTO): ProductDTO {
+        val newProduct = productDTO.toEntity()
+        val result = productRepository.save(newProduct)
+        return result.toDTO()
     }
 
 }

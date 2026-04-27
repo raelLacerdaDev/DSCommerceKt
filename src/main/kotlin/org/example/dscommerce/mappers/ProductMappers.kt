@@ -12,3 +12,10 @@ fun Product.toDTO() : ProductDTO = ProductDTO(
     imgUrl = this.imgUrl,
 )
 
+fun ProductDTO.toEntity() : Product = Product(
+    id = this.id ?: 0L,
+    name = this.name,
+    description = this.description,
+    price = this.price,
+    imgUrl = this.imgUrl,
+)
