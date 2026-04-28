@@ -6,6 +6,7 @@ import org.example.dscommerce.services.ProductService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -51,6 +52,12 @@ class ProductController (private val service: ProductService) {
     fun update(@PathVariable id: Long, @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
         val dto = service.update(id, product)
         return ResponseEntity.ok(dto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) : ResponseEntity<Unit> {
+        service.delete(id)
+        return ResponseEntity.noContent().build()
     }
 
 

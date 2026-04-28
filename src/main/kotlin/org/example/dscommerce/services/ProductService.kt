@@ -41,4 +41,8 @@ class ProductService(private val productRepository: ProductRepository) {
         return savedProduct.toDTO()
     }
 
+    @Transactional fun delete(id: Long) {
+        productRepository.deleteById(id)
+    }
+
 }
