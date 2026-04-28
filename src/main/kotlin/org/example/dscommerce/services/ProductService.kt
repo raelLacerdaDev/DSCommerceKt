@@ -1,6 +1,7 @@
 package org.example.dscommerce.services
 
 import org.example.dscommerce.dto.ProductDTO
+import org.example.dscommerce.entities.Product
 import org.example.dscommerce.mappers.toDTO
 import org.example.dscommerce.mappers.toEntity
 import org.example.dscommerce.repositories.ProductRepository
@@ -16,8 +17,7 @@ class ProductService(private val productRepository: ProductRepository) {
     fun findById(id: Long): ProductDTO {
         val result = productRepository.findById(id)
         val product = result.get()
-        val productDTO = product.toDTO()
-        return productDTO
+        return product.toDTO()
     }
 
 
@@ -32,6 +32,13 @@ class ProductService(private val productRepository: ProductRepository) {
         val newProduct = productDTO.toEntity()
         val result = productRepository.save(newProduct)
         return result.toDTO()
+    }
+
+    @Transactional fun update(id: Long, productDTO: ProductDTO): ProductDTO {
+        val product = productRepository.getReferenceById(id)
+        val updatedProduct = Product(product.id, productDTO.name, productDTO.description, productDTO.price, productDTO.imgUrl)
+        val savedProduct = productRepository.save(updatedProduct)
+        return savedProduct.toDTO()
     }
 
 }
