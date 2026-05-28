@@ -1,6 +1,7 @@
 package org.example.dscommerce.controllers
 
 
+import jakarta.validation.Valid
 import org.example.dscommerce.dto.ProductDTO
 import org.example.dscommerce.services.ProductService
 import org.springframework.data.domain.Page
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
@@ -28,14 +30,14 @@ class ProductController (private val service: ProductService) {
     }
 
     @GetMapping
-    fun findAll(pageable: Pageable) : ResponseEntity<Page<ProductDTO>> {
-        val page = service.findAll(pageable)
+    fun findAll(@RequestParam(name = "name", defaultValue = "") name: String, pageable: Pageable) : ResponseEntity<Page<ProductDTO>> {
+        val page = service.findAll(name, pageable)
         return ResponseEntity.ok(page)
     }
 
 
     @PostMapping
-    fun insert(@RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
+    fun insert(@Valid @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
         val dto = service.insert(product)
 
         val uri = ServletUriComponentsBuilder
@@ -49,7 +51,7 @@ class ProductController (private val service: ProductService) {
     }
 
     @PutMapping( "/{id}")
-    fun update(@PathVariable id: Long, @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
+    fun update(@PathVariable id: Long,@Valid @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
         val dto = service.update(id, product)
         return ResponseEntity.ok(dto)
     }

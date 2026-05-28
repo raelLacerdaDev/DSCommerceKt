@@ -7,11 +7,9 @@ import org.example.dscommerce.mappers.toDTO
 import org.example.dscommerce.mappers.toEntity
 import org.example.dscommerce.repositories.ProductRepository
 import org.example.dscommerce.services.exceptions.ResourceNotFoundException
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.orm.ObjectRetrievalFailureException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,9 +26,8 @@ class ProductService(private val productRepository: ProductRepository) {
 
 
     @Transactional(readOnly = true)
-    fun findAll(pageable: Pageable): Page<ProductDTO> {
-        val result = productRepository.findAll(pageable)
-        return result.map { it.toDTO() }
+    fun findAll(name: String, pageable: Pageable): Page<ProductDTO> {
+        return productRepository.searchByName(name, pageable)
     }
 
 
