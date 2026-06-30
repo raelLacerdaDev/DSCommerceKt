@@ -7,6 +7,7 @@ import org.example.dscommerce.services.ProductService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -35,7 +36,7 @@ class ProductController (private val service: ProductService) {
         return ResponseEntity.ok(page)
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     fun insert(@Valid @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
         val dto = service.insert(product)
@@ -50,12 +51,14 @@ class ProductController (private val service: ProductService) {
         return ResponseEntity.created(uri).body(dto)
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping( "/{id}")
     fun update(@PathVariable id: Long,@Valid @RequestBody product: ProductDTO) : ResponseEntity<ProductDTO> {
         val dto = service.update(id, product)
         return ResponseEntity.ok(dto)
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) : ResponseEntity<Unit> {
         service.delete(id)

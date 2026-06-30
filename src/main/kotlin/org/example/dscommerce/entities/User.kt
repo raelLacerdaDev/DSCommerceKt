@@ -6,9 +6,14 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDate
 
 @Entity
@@ -22,12 +27,23 @@ class User(
     val email: String,
     val phone: String,
     val birthDate: LocalDate,
-    val password: String,
+    private val password: String,
     @OneToMany(mappedBy = "client")
     private val _orders: MutableList<Order> = mutableListOf(),
-) {
+
+    @ManyToMany
+    @JoinTable(
+        name = "tb_user_role",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id")]
+    )
+    private val _roles: MutableSet<Role> = mutableSetOf(),
+) : UserDetails {
     val orders : List<Order>
         get() = _orders.toList()
+
+    val roles : List<Role>
+        get() = _roles.toList()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,4 +54,24 @@ class User(
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
+
+    override fun getAuthorities(): Collection<GrantedAuthority> {
+        return roles
+    }
+
+    override fun getUsername(): String {
+        return email
+    }
+    override fun getPassword(): String {
+        return password
+    }
+
+    fun hasRole(name: String): Boolean {
+        return _roles.any { it.authority == name }
+    }
+
+    fun addRole(role: Role) {
+        _roles.add(role)
+    }
+
 }
