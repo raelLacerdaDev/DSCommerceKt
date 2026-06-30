@@ -5,6 +5,7 @@ import org.example.dscommerce.projections.UserDetailsProjection
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.util.Optional
 
 interface UserRepository : JpaRepository<User, Long> {
 
@@ -24,5 +25,7 @@ interface UserRepository : JpaRepository<User, Long> {
             WHERE tb_user.email = :email
         """
     )
-    fun findByEmail(@Param("email") email: String): List<UserDetailsProjection>
+    fun searchByEmail(@Param("email") email: String): List<UserDetailsProjection>
+
+    fun findByEmail(email: String): Optional<User>
 }
